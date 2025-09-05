@@ -22,7 +22,7 @@ export default function LandingPagePhone() {
       />
       {/* Waterfall Background */}
 {/* Waterfall Background */}
-<div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center w-64 h-[100vh] overflow-hidden z-0 opacity-60">
+<div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center w-64 h-[100dvh] overflow-hidden z-0 opacity-60">
   <img
     src="/video/waterfall.gif"
     alt="Waterfall"

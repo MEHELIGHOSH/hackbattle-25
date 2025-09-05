@@ -10,6 +10,16 @@
   cursor: none !important;
 }
 
+:root {
+  --vh: 100vh;
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --vh: 100dvh;
+  }
+}
+
 @font-face {
   font-family: "Pixeboy";
   src: url("/fonts/Pixeboy.ttf") format("truetype");
