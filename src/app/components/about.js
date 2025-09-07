@@ -45,10 +45,10 @@ const DesktopAbout = () => (
                 {/* Text panel */}
                 <div className="absolute inset-0 flex items-center justify-center z-[2] pointer-events-none">
                     <div className="max-w-[520px] px-5 py-4 text-center text-[#FAF6DA] font-['Press_Start_2P']">
-                        <h2 className="mt-[1vh] mb-[5vw] text-[2.4rem]  font-bold text-[#f2e5a6] [text-shadow:3px_3px_#3a1d0c] animate-glow-pulse">
+                        <h2 className="-mt-[1vh] mb-[2vw] text-[2.2rem]  font-bold text-[#f2e5a6] [text-shadow:3px_3px_#3a1d0c] animate-glow-pulse">
                             ABOUT
                         </h2>
-                        <p className="text-[1.1rem] leading-[1.6] text-shadow-lg text-shadow-black/80">
+                        <p className="text-[1 rem] leading-[1.6] text-shadow-lg text-shadow-black/80">
                             Join the adrenaline-pumping 36-hour HackBattle by IEEE CS VIT, where tech innovators gather for
                             groundbreaking challenges, keynote sessions, and engaging activities that ignite creativity and
                             drive innovation.
