@@ -2,12 +2,12 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import MobileLanding from "./MobileLanding";
-import Navbar from "./Navbar";
 import Link from "next/link";
+import MinecraftTimer from "./Timer";
 
 export default function Home({ onFinish }) {
-  const [loading, setLoading] = useState(true);
-  
+  const [loading, setLoading] = useState(true); // tracks asset loading
+  const [forcePlayOnce, setForcePlayOnce] = useState(true); // ensures video plays once
 
   useEffect(() => {
     const assets = [
@@ -22,7 +22,6 @@ export default function Home({ onFinish }) {
       "/leaf-right.webp",
       "/man.webp",
       "/discord.webp",
-      "/registerborder.webp",
     ];
 
     let loaded = 0;
@@ -30,39 +29,42 @@ export default function Home({ onFinish }) {
     assets.forEach((src) => {
       const img = new window.Image();
       img.src = src;
-      img.onload = () => {
+      img.onload = img.onerror = () => {
         loaded++;
         if (loaded === assets.length) {
           setLoading(false);
-          if (onFinish) onFinish(); // notify parent
-        }
-      };
-      img.onerror = () => {
-        loaded++;
-        if (loaded === assets.length) {
-          setLoading(false);
-          if (onFinish) onFinish(); // notify parent
+          if (onFinish) onFinish();
         }
       };
     });
   }, [onFinish]);
 
+  const handleVideoEnd = () => {
+    if (!loading) {
+      setForcePlayOnce(false);
+    }
+  };
+
+  const showSplash = loading || forcePlayOnce;
+
   return (
-    <div className="relative select-none h-[100dvh] overflow-hidden">
-      {/* Background image for desktop */}
-      {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
+    <div className="relative select-none h-[100dvh] overflow-hidden" id="home">
+      {showSplash && (
+        <div className="fixed inset-0 z-50">
           <video
-            src="/loader.webm"
-            alt="Loading..."
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-32 h-32"
-          />
+  src="mojang.mp4"
+  autoPlay
+  muted
+  playsInline
+  onEnded={handleVideoEnd}
+  loop={loading}
+  className="absolute top-0 left-0 w-full h-full object-contain md:object-cover bg-[#db1f26]"
+  style={{ objectPosition: "center" }}
+/>
+
         </div>
       )}
+
       <Image
         src="/background.webp"
         alt="Background"
@@ -72,7 +74,6 @@ export default function Home({ onFinish }) {
         draggable="false"
       />
 
-      {/* Background image for mobile */}
       <Image
         src="/phone-bg.webp"
         alt="Background"
@@ -83,10 +84,9 @@ export default function Home({ onFinish }) {
       />
 
       <div className="absolute top-0 left-170 w-64 h-168 hidden md:block overflow-hidden z-0 opacity-60">
-        {/* Static Waterfall Background */}
         <Image
-        height={0}
-        width={0}
+          height={0}
+          width={0}
           src="/waterfall.gif"
           alt="Waterfall"
           className="w-full h-150 object-cover"
@@ -120,11 +120,9 @@ export default function Home({ onFinish }) {
           />
         </div>
 
-        <Navbar />
         {/* Right vines + leaves */}
         <div className="absolute top-0 right-3 flex z-10">
           <div className="relative flex">
-            {/* Vines */}
             {[250, 200, 300, 180].map((h, i) => (
               <Image
                 key={i}
@@ -141,15 +139,15 @@ export default function Home({ onFinish }) {
         </div>
 
         {/* Hero section */}
-        <section className="relative w-[50vw] z-10 flex flex-col items-center text-center mt-10">
-          <div className="z-10 font-pixeboy text-[20vh] leading-none [text-shadow:4px_4px_4px_var(--tw-shadow-color)] shadow-[#FFF58C] text-[#F3EDCB] animate-glow-pulse">
+        <section className="relative w-[50vw] z-10 flex flex-col items-center text-center mt-20">
+          <div className="z-10 font-pixeboy text-[16vh] leading-none [text-shadow:4px_4px_4px_var(--tw-shadow-color)] shadow-[#FFF58C] text-[#F3EDCB] animate-glow-pulse">
             HACK
           </div>
-          <div className="z-10 font-pixeboy text-[20vh] leading-none [text-shadow:4px_4px_4px_var(--tw-shadow-color)] shadow-[#FFF58C] text-[#F3EDCB] animate-glow-pulse">
+          <div className="z-10 font-pixeboy text-[16vh] leading-none [text-shadow:4px_4px_4px_var(--tw-shadow-color)] shadow-[#FFF58C] text-[#F3EDCB] animate-glow-pulse">
             BATTLE
           </div>
           <div className="z-10 font-pixeboy text-6xl mt-4 animate-glow-pulse">
-            JOIN THE ULTIMATE
+            THE ULTIMATE
           </div>
           <div className="z-10 font-pixeboy text-6xl mt-2 animate-glow-pulse">
             36 hour Hackathon
@@ -157,22 +155,7 @@ export default function Home({ onFinish }) {
 
           {/* Register button */}
           <div className="relative b mt-6">
-            <Link
-              href="https://gravitas.vit.ac.in/events/e3dd00a8-fc7f-433a-9bfa-3d20c3d5bdd0"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <button className="hover:scale-110  transition">
-                <Image
-                  src="/reg.webp"
-                  alt="Register"
-                  width={350}
-                  height={400}
-                  className="w-48 sm:w-64 lg:w-80"
-                  draggable="false"
-                />
-              </button>
-            </Link>
+            <MinecraftTimer />
           </div>
         </section>
 
@@ -188,24 +171,20 @@ export default function Home({ onFinish }) {
           />
         </div>
         <div className="absolute bottom-58 right-3 -translate-x-1/2 z-10">
-          <video
-            src="/video/frog.webm"
-            autoPlay
-            loop
-            muted
-            playsInline
+          <Image
+          width={0}
+
+height={0}            src="/video/frog.gif"
+alt="frog"
             className="w-30 h-full"
           />
         </div>
-
         <div className="absolute bottom-10 right-19 -translate-x-1/2 z-10">
-          <video
-            src="/video/axo.webm"
-            alt="Creature2"
-            autoPlay
-            loop
-            muted
-            playsInline
+          <Image
+          width={0}
+          height={0}
+            src="/video/axo.gif"
+            alt="axo"
             className="w-30 h-full"
             draggable="false"
           />
@@ -214,5 +193,3 @@ export default function Home({ onFinish }) {
     </div>
   );
 }
-
-

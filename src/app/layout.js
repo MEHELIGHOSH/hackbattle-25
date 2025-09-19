@@ -2,6 +2,8 @@
 import './globals.css';
 import { Press_Start_2P } from 'next/font/google';
 import Script from "next/script";
+import SmoothScroll from "./SmoothScroll.js";
+import CustomCursor from './components/Cursor';
 
 export const metadata = { 
   title: 'HackBattle 2025', 
@@ -23,7 +25,7 @@ const pressStart2P = Press_Start_2P({
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-       <head>
+      <head>
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
           strategy="afterInteractive"
@@ -38,8 +40,10 @@ export default function RootLayout({ children }) {
         </Script>
       </head>
       <body className={pressStart2P.className}>
-        {children}
-       {/* <Chatbot /> */}
+        {/* <SmoothScroll> */}
+          {children}
+        {/* </SmoothScroll> */}
+        <CustomCursor />
       </body>
     </html>
   );
