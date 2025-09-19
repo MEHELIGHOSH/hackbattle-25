@@ -242,3 +242,66 @@ html {
 .fly {
   animation: fly 12s linear infinite;
 }
+
+/* Camel walk animation */
+@keyframes camel-walk {
+  0% {
+    left: 100vw;   /* start off-screen right */
+  }
+  100% {
+    left: -150px;  /* walk smoothly to left */
+  }
+}
+
+.camel {
+  position: absolute;
+  top: 50%; /* adjust vertical position */
+  animation: camel-walk 20s linear infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes chickenWalk {
+  0% {
+    transform: translateX(-120%) translateY(0) scaleX(1);
+  }
+  10% {
+    transform: translateX(-90%) translateY(-25px) scaleX(1);
+  }
+  20% {
+    transform: translateX(-60%) translateY(0) scaleX(1);
+  }
+  30% {
+    transform: translateX(-30%) translateY(-25px) scaleX(1);
+  }
+  40% {
+    transform: translateX(0) translateY(0) scaleX(1);
+  }
+  50% {
+    transform: translateX(120%) translateY(-25px) scaleX(1);
+  }
+
+  /* Flip and return */
+  51% {
+    transform: translateX(120%) translateY(0) scaleX(-1); /* flip instantly */
+  }
+  60% {
+    transform: translateX(90%) translateY(-25px) scaleX(-1);
+  }
+  70% {
+    transform: translateX(60%) translateY(0) scaleX(-1);
+  }
+  80% {
+    transform: translateX(30%) translateY(-25px) scaleX(-1);
+  }
+  90% {
+    transform: translateX(0) translateY(0) scaleX(-1);
+  }
+  100% {
+    transform: translateX(-120%) translateY(-25px) scaleX(-1); /* fully off-screen left */
+  }
+}
+
+.chicken-jockey {
+  animation: chickenWalk 10s linear infinite;
+  will-change: transform;
+}
