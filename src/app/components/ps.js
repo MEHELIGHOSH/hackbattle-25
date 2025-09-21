@@ -41,7 +41,7 @@ export default function ProblemStatements() {
   ];
 
   return (
-    <div id="ps" className="relative flex flex-col h-screen w-full text-center items-center">
+    <div id="ps" className="relative flex flex-col h-[80vh] lg:h-screen w-full text-center items-center">
       <Image
         src="/ps.svg"
         alt="Background"
@@ -55,7 +55,7 @@ export default function ProblemStatements() {
         PROBLEM STATEMENTS
       </h1>
 
-      <div className="flex flex-col md:flex-row w-[85vw] md:w-[60vw] gap-y-[1vh] gap-x-[1vw] md:gap-y-0 h-[80vh] overflow-hidden relative z-10">
+      <div className="flex flex-col md:flex-row w-[80vw] md:w-[60vw] gap-y-[1vh] gap-x-[2vw] md:gap-y-0 h-[60vh] md:h-[80vh] overflow-hidden relative z-10">
         {statements.map((s, i) => (
           <div
             key={i}
