@@ -11,7 +11,7 @@ export default function Chatbot() {
 
   const sendMessage = async () => {
     if (!msg.trim()) return;
-
+    setMsg(msg.trim().toLowerCase());
     const userMessage = { role: "user", content: msg };
     
     setMessages([userMessage]);
@@ -19,10 +19,10 @@ export default function Chatbot() {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage.content }),
+        body: JSON.stringify({ question: userMessage.content }),
       });
 
       if (!res.ok) {
@@ -33,7 +33,9 @@ export default function Chatbot() {
 
       const data = await res.json();
       console.log("Bot response:", data);
-
+      if (data.answer === "I don’t know.") {
+        data.answer = "I am unable to provide an answer. Please visit our Discord server via the link in the navbar for more information.";
+      }      
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: data.answer || "No response" },
@@ -57,7 +59,7 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="fixed bottom-12 right-6 z-50">
+    <div className="fixed right-12 bottom-24 md:bottom-12 md:right-6 z-50">
       {isOpen ? (
         <div className="w-80 h-96 lg:w-[30vw] lg:max-h-[50vh] bg-white shadow-lg rounded-lg flex flex-col text-black">
           <div className="flex items-center justify-between p-3 border-b">
@@ -110,7 +112,6 @@ export default function Chatbot() {
                 onChange={(e) => setMsg(e.target.value)}
                 onKeyDown={handleKeyDown}
                 maxLength={150}
-                // placeholder="Ask a question (max 100 chars)..."
               />
               <button
                 className={`px-3 py-2 rounded-lg text-white ${
