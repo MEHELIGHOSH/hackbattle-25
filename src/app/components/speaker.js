@@ -79,7 +79,7 @@ export default function SpeakerSection() {
     href="https://www.linkedin.com/in/shubham-0707"
     target="_blank"
     rel="noopener noreferrer"
-    className="text-blue-700 hover:text-blue-900"
+    className="text-white hover:text-gray-300"
   >
     <FaLinkedin className="text-[28px] md:text-[48px]" />
   </a>
