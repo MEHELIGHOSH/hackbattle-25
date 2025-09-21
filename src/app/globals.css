@@ -213,14 +213,13 @@ html {
   }
 }
 
-/* Base style for each snowflake */
 .snowflake {
   position: absolute;
   color: white;
   animation: fall linear infinite;
-  /* UPDATED: Increased the glow effect for better visibility */
   text-shadow: 0 0 8px rgba(255, 255, 255, 1), 0 0 12px rgba(255, 255, 255, 0.8);
 }
+
 @keyframes fly {
   0% {
     transform: translate(0, 0) rotate(0deg);
@@ -243,65 +242,34 @@ html {
   animation: fly 12s linear infinite;
 }
 
-/* Camel walk animation */
-@keyframes camel-walk {
-  0% {
-    left: 100vw;   /* start off-screen right */
-  }
-  100% {
-    left: -150px;  /* walk smoothly to left */
-  }
+::-webkit-scrollbar {
+  width: 10px;
 }
 
-.camel {
+::-webkit-scrollbar-track {
+  background: transparent;
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #048413;
   position: absolute;
-  top: 50%; /* adjust vertical position */
-  animation: camel-walk 20s linear infinite;
-  animation-timing-function: linear;
+  border-radius: 10px;
+  width: 10px;
 }
 
-@keyframes chickenWalk {
-  0% {
-    transform: translateX(-120%) translateY(0) scaleX(1);
-  }
-  10% {
-    transform: translateX(-90%) translateY(-25px) scaleX(1);
-  }
-  20% {
-    transform: translateX(-60%) translateY(0) scaleX(1);
-  }
-  30% {
-    transform: translateX(-30%) translateY(-25px) scaleX(1);
-  }
-  40% {
-    transform: translateX(0) translateY(0) scaleX(1);
-  }
-  50% {
-    transform: translateX(120%) translateY(-25px) scaleX(1);
-  }
-
-  /* Flip and return */
-  51% {
-    transform: translateX(120%) translateY(0) scaleX(-1); /* flip instantly */
-  }
-  60% {
-    transform: translateX(90%) translateY(-25px) scaleX(-1);
-  }
-  70% {
-    transform: translateX(60%) translateY(0) scaleX(-1);
-  }
-  80% {
-    transform: translateX(30%) translateY(-25px) scaleX(-1);
-  }
-  90% {
-    transform: translateX(0) translateY(0) scaleX(-1);
-  }
-  100% {
-    transform: translateX(-120%) translateY(-25px) scaleX(-1); /* fully off-screen left */
-  }
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-.chicken-jockey {
-  animation: chickenWalk 10s linear infinite;
+#smooth-wrapper {
+  height: 100%;
+  overflow: hidden;
+}
+
+#smooth-content {
+  min-height: 100%;
   will-change: transform;
 }
