@@ -32,7 +32,7 @@ export default function Chatbot() {
       }
 
       const data = await res.json();
-      console.log("Bot response:", data);
+      console.log(userMessage.content, "Bot response:", data.answer);
       if (data.answer === "I don’t know.") {
         data.answer = "I am unable to provide an answer. Please visit our Discord server via the link in the navbar for more information.";
       }      
@@ -59,7 +59,7 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="fixed right-12 bottom-24 md:bottom-12 md:right-6 z-50">
+    <div className="fixed bottom-12 right-6 z-50">
       {isOpen ? (
         <div className="w-80 h-96 lg:w-[30vw] lg:max-h-[50vh] bg-white shadow-lg rounded-lg flex flex-col text-black">
           <div className="flex items-center justify-between p-3 border-b">
