@@ -8,21 +8,32 @@ import { useRouter } from "next/navigation";
 export default function LandingPagePhone() {
   const [user, setUser] = useState(null);
   const [userStatus, setUserStatus] = useState(null);
-  const router=useRouter();
-  
+  const router = useRouter();
+ useEffect(() => {
+   const storedUser = localStorage.getItem("user");
+   if (storedUser) setUser(JSON.parse(storedUser));
+
+   const status = localStorage.getItem("UserStatus");
+   if (status === "true" || status === "false") setUserStatus(status);
+ }, []);
+
+
   useEffect(() => {
-      const status = localStorage.getItem("UserStatus");
-      if (status === "true" || status === "false") setUserStatus(status);
-    }, []);
-    const handleRedirect = () => {
-      if (userStatus === "true") {
-        router.push("/team");
-      } else if (userStatus === "false") {
-        router.push("/dashboard");
-      }
-    };
+    const status = localStorage.getItem("UserStatus");
+    if (status === "true" || status === "false") setUserStatus(status);
+  }, []);
+  const handleRedirect = () => {
+    if (userStatus === "true") {
+      router.push("/team");
+    } else if (userStatus === "false") {
+      router.push("/dashboard");
+    }
+  };
   return (
-    <div className="relative h-[100dvh] w-full overflow-hidden text-white font-pixeboy select-none" id="home">
+    <div
+      className="relative h-[100dvh] w-full overflow-hidden text-white font-pixeboy select-none"
+      id="home"
+    >
       {/* Background */}
       <Image
         src="/landing-bg.webp"
@@ -62,28 +73,26 @@ export default function LandingPagePhone() {
         <div className="flex justify-center h-[15vh]">
           <MinecraftTimer />
         </div>
-        {user && (
-            <button
+        {userStatus && (
+          <button
             onClick={handleRedirect}
-            className="px-6 py-3 bg-red-600 text-white font-pixeboy text-xl rounded-md hover:bg-red-700 transition"
+            className="px-6 py-3 bg-red-600 text-white font-pixeboy text-xl rounded-md hover:bg-red-700 transition mt-4"
           >
-            {userStatus ? "Go to Team Page" : "Go to Dashboard"}
+            {userStatus === "true" ? "Go to Team Page" : "Go to Dashboard"}
           </button>
-          )}
+        )}
 
         <div className="relative w-full flex justify-start items-end">
-  <Image
-    src="/phone-man.webp"
-    alt="character"
-    height={0}
-    width={0}
-    sizes="100vh"
-    className="h-[40vh] w-auto object-contain"
-    draggable={false}
-  />
-</div>
-
-
+          <Image
+            src="/phone-man.webp"
+            alt="character"
+            height={0}
+            width={0}
+            sizes="100vh"
+            className="h-[40vh] w-auto object-contain"
+            draggable={false}
+          />
+        </div>
       </div>
     </div>
   );
