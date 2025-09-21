@@ -6,6 +6,7 @@ import FaqItem from '../components/FaqItem';
 import CharacterDisplay from '../components/CharacterDisplay';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import Footer from './footer';
 
 const vt323 = VT323({
   weight: '400',
@@ -49,17 +50,28 @@ const VideoPreloader = ({ sources }) => {
 export default function FaqSection() {
   
   const [openIndex, setOpenIndex] = useState(null);
-  const [currentCharacter, setCurrentCharacter] = useState({ src: '/Blaze.webm', style: {} }); 
+  const [currentCharacter, setCurrentCharacter] = useState({ src: '/Blaze.webm', style: {} });
+  const [displayedCharacter, setDisplayedCharacter] = useState(currentCharacter);
+  useEffect(() => {
+    const video = document.createElement('video');
+    video.src = currentCharacter.src;
+    video.onloadeddata = () => {
+      setDisplayedCharacter(currentCharacter);
+    };
+  }, [currentCharacter]); 
+
+
+
 
   const pathname = usePathname();
 
   const faqData = [
-    { question: "What is Hack Battle?", answer: "HackBattle, organized by IEEE Computer Society (IEEE CS), is a dynamic 36-hour hackathon that goes beyond coding. It’s a journey of teamwork, mentorship, and innovation where participants tackle real-world problem statements, attend workshops and tech talks, and network with industry leaders.", headImageSrc: "/minecraft-head-steve.jpeg", characterWebM: "/Steve.webm", characterStyle: { transform: 'translateY(110px) scale(2.0)' } },
-    { question: "Do I need Minecraft to join?", answer: "Nope! The Minecraft theme is just for fun. HackBattle is about solving real-world challenges with creativity and technology. You don’t need Minecraft installed or any prior experience with the game.", headImageSrc: "/minecraft-head-alex.jpeg", characterWebM: "/Alex.webm", characterStyle: { transform: 'translateY(100px) translateX(20px) scale(2.0)' } },
-    { question: "How do I register?",answer: "You can register through the official graVITas website. Teams of 3–5 members must be finalized before the event begins, as solo participation is not allowed.", headImageSrc: "/minecraft-head-chicken.jpeg", characterWebM: "/Chicken.webm", characterStyle: { transform: 'translateY(158px) translateX(10px) scale(1.2)'} }, 
-    { question: "Is Hackbattle fresher friendly?", answer: "Absolutely! HackBattle is designed to support beginners as well as experienced developers. With mentorship, speaker sessions, and guidance, freshers will find it the perfect launchpad to learn and grow.", headImageSrc: "/minecraft-head-creeper.jpeg", characterWebM: "/Creeper.webm", characterStyle: { transform: 'translateY(200px) translateX(20px) scale(1.2)' } },
-    { question: "What should i bring?", answer: "Bring your laptop, charger, extension cord, and any hardware components your project may need. Hardware will not be provided at the venue, so teams must arrange their own.", headImageSrc: "/minecraft-head-piglin.jpg", characterWebM: "/Piglin.webm", characterStyle: { transform: 'translateY(170px) translateX(-40px) scale(1.2)' } },
-    { question: "Is there a team size limit?", answer: "Yes. Teams must have 3–5 members. Solo participation is not permitted, but members can come from any background or discipline.", headImageSrc: "/minecraft-head-zombie.png", characterWebM: "/Zombie.webm", characterStyle: { transform: 'translateY(155px) translateX(-50px) scale(1.2)' } },
+    { question: "What is Hack Battle ?", answer: "HackBattle, organized by IEEE Computer Society (IEEE CS), is a dynamic 36-hour hackathon that goes beyond coding. It’s a journey of teamwork, mentorship, and innovation where participants tackle real-world problem statements, attend workshops and tech talks, and network with industry leaders.", headImageSrc: "/minecraft-head-steve.jpeg", characterWebM: "/Steve.webm", characterStyle: { transform: 'translateY(110px) scale(2.0)' } },
+    { question: "Do I need Minecraft to join ?", answer: "Nope! The Minecraft theme is just for fun. HackBattle is about solving real-world challenges with creativity and technology. You don’t need Minecraft installed or any prior experience with the game.", headImageSrc: "/minecraft-head-alex.jpeg", characterWebM: "/Alex.webm", characterStyle: { transform: 'translateY(100px) translateX(20px) scale(2.0)' } },
+    { question: "Will On Duty (OD) be provided ?",answer: "Yes OD will be provided for internal participants if they report to the venue on time and record their attendance.", headImageSrc: "/minecraft-head-chicken.jpeg", characterWebM: "/Chicken.webm", characterStyle: { transform: 'translateY(158px) translateX(10px) scale(1.2)'} }, 
+    { question: "Is Hackbattle fresher friendly ?", answer: "Absolutely! HackBattle is designed to support beginners as well as experienced developers. With mentorship, speaker sessions, and guidance, freshers will find it the perfect launchpad to learn and grow.", headImageSrc: "/minecraft-head-creeper.jpeg", characterWebM: "/Creeper.webm", characterStyle: { transform: 'translateY(200px) translateX(20px) scale(1.2)' } },
+    { question: "What should I bring ?", answer: "Bring your laptop, charger, extension cord, and any hardware components your project may need. Hardware will not be provided at the venue, so teams must arrange their own.", headImageSrc: "/minecraft-head-piglin.jpg", characterWebM: "/Piglin.webm", characterStyle: { transform: 'translateY(170px) translateX(-40px) scale(1.2)' } },
+    { question: "What is the required team size ?", answer: "Teams must have 5 members. Solo participation is not permitted, but members can come from any background or discipline.", headImageSrc: "/minecraft-head-zombie.png", characterWebM: "/Zombie.webm", characterStyle: { transform: 'translateY(155px) translateX(-50px) scale(1.2)' } },
   ];
 
   const videoSources = faqData.map(item => item.characterWebM);
@@ -68,6 +80,7 @@ export default function FaqSection() {
   const toggleItem = (index) => {
     if (openIndex === index) {
       setOpenIndex(null);
+
       setCurrentCharacter({ src: '/Blaze.webm', style: {} });
     } else {
       setOpenIndex(index);
@@ -104,10 +117,11 @@ export default function FaqSection() {
           
           <div className="hidden md:flex md:w-1/3 md:items-end md:justify-center">
             <div className="w-full mt-35">
+
               <CharacterDisplay 
-                characterSrc={currentCharacter.src} 
-                style={currentCharacter.style}
-                className={currentCharacter.src === '/Blaze.webm' ? 'transform scale-x-[-1]' : ''}
+                characterSrc={displayedCharacter.src} 
+                style={displayedCharacter.style}
+                className={displayedCharacter.src === '/Blaze.webm' ? 'transform scale-x-[-1]' : ''}
               />
             </div>
           </div>
@@ -122,9 +136,11 @@ export default function FaqSection() {
                 isOpen={openIndex === index}
                 toggleItem={() => toggleItem(index)}
               />
+            
             ))}
           </div>
         </main>
+        <Footer/>
       </div>
     </section>
   );
