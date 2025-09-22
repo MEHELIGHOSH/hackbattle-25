@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { loginWithGoogle, logout } from "./Google";
 import Toast from "./Toast";
@@ -91,14 +92,14 @@ export default function Navbar() {
           ))}
         </div>
         <div className="flex items-center gap-4 ml-8">
-          <a
+          <Link
             href="https://discord.gg/Qj2qyYQXBF"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-[#1e2e24] p-2 rounded-full hover:scale-110 transition"
           >
             <Image src="/discord.webp" alt="Discord" height={24} width={24} />
-          </a>
+          </Link>
 
           {/* <button
             onClick={user ? handleLogout : handleLogin}
@@ -125,14 +126,14 @@ export default function Navbar() {
             >
               {user ? "LOGOUT" : "LOGIN"}
             </button> */}
-            <a
+            <Link
               href="https://discord.gg/Qj2qyYQXBF"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#1e2e24] p-2 rounded-full hover:scale-110 transition border-2 border-white"
             >
               <Image src="/discord.webp" alt="Discord" height={40} width={40} />
-            </a>
+            </Link>
             
           </div>
         </div>
