@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { loginWithGoogle, logout } from "./Google";
 import Toast from "./Toast";
@@ -91,14 +92,14 @@ export default function Navbar() {
           ))}
         </div>
         <div className="flex items-center gap-4 ml-8">
-          <a
+          <Link
             href="https://discord.gg/Qj2qyYQXBF"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-[#1e2e24] p-2 rounded-full hover:scale-110 transition"
           >
             <Image src="/discord.webp" alt="Discord" height={24} width={24} />
-          </a>
+          </Link>
 
           {/* <button
             onClick={user ? handleLogout : handleLogin}
@@ -112,16 +113,29 @@ export default function Navbar() {
       {/* Mobile Navbar */}
       <div className="block md:hidden">
         <div className="fixed top-0 left-0 right-0 flex flex-row justify-between items-center px-6 py-4 z-30">
-          <button onClick={() => setMenuOpen(true)} className=" text-3xl text-white">
-            ☰
-          </button>
-
-          {/* <button
-            onClick={user ? handleLogout : handleLogin}
-            className="bg-yellow-500 text-black px-4 py-2 rounded-full text-2xl font-pixeboy"
-          >
-            {user ? "LOGOUT" : "LOGIN"}
-          </button> */}
+          <div className="flex items-center gap-4">
+            
+            <button onClick={() => setMenuOpen(true)} className=" text-3xl text-white">
+              ☰
+            </button>
+          </div>
+          <div className="flex items-center gap-4">
+            {/* <button
+              onClick={user ? handleLogout : handleLogin}
+              className="bg-yellow-500 text-black px-4 py-2 rounded-full text-2xl font-pixeboy"
+            >
+              {user ? "LOGOUT" : "LOGIN"}
+            </button> */}
+            <Link
+              href="https://discord.gg/Qj2qyYQXBF"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#1e2e24] p-2 rounded-full hover:scale-110 transition border-2 border-white"
+            >
+              <Image src="/discord.webp" alt="Discord" height={40} width={40} />
+            </Link>
+            
+          </div>
         </div>
 
         {menuOpen && (
