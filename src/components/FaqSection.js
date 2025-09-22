@@ -41,10 +41,17 @@ export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState(null);
   const [currentCharacter, setCurrentCharacter] = useState({ src: '/Blaze.gif', style: {} });
   const [displayedCharacter, setDisplayedCharacter] = useState(currentCharacter);
+  const [chestOpenSound, setChestOpenSound] = useState(null);
+  const [chestCloseSound, setChestCloseSound] = useState(null);
 
   useEffect(() => {
     setDisplayedCharacter(currentCharacter);
   }, [currentCharacter]); 
+
+  useEffect(() => {
+    setChestOpenSound(new Audio('/Chest.ogg'));
+    setChestCloseSound(new Audio('/Chest_close.ogg'));
+  }, []);
 
   const pathname = usePathname();
 
@@ -57,21 +64,19 @@ export default function FaqSection() {
     { question: "What is the required team size ?", answer: "Teams must have 5 members. Solo participation is not permitted, but members can come from any background or discipline.", headImageSrc: "/minecraft-head-zombie.png", characterWebM: "/Zombie.gif", characterStyle: { transform: 'translateY(155px) translateX(-50px) scale(1.2)' } },
   ];
 
-  const playChestSound = () => {
-    try {
-      const audio = new Audio('/Chest.ogg');
-      audio.play();
-    } catch (error) {
-      console.error("Error playing audio:", error);
-    }
-  };
-
   const toggleItem = (index) => {
     if (openIndex === index) {
+      if (chestCloseSound) {
+        chestCloseSound.currentTime = 0;
+        chestCloseSound.play();
+      }
       setOpenIndex(null);
       setCurrentCharacter({ src: '/Blaze.gif', style: {} });
     } else {
-      playChestSound();
+      if (chestOpenSound) {
+        chestOpenSound.currentTime = 0;
+        chestOpenSound.play();
+      }
       setOpenIndex(index);
       setCurrentCharacter({ 
         src: faqData[index].characterWebM, 
