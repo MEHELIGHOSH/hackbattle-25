@@ -47,15 +47,30 @@ export default function LandingPagePhone() {
       {/* Page Content */}
       <div className="relative z-10 flex flex-col items-center justify-between h-full text-center">
         {/* Heading */}
-        <section className="flex flex-col items-center font-pixeboy mt-6">
+        <section className="flex flex-col items-center font-pixeboy mt-12">
+          <div>
+                      <Image
+                        src="/bob.png"
+                        alt="Discord"
+                        width={200}
+                        height={200}
+                        draggable="false"
+                        className=""
+                      />
+                    </div>
+                    <div className="leading-none [text-shadow:4px_4px_4px_var(--tw-shadow-color)] shadow-[#FFF58C] text-[#F3EDCB] animate-glow-pulse mt-4">
+            presents
+          </div>
           <div className="text-8xl [text-shadow:4px_4px_4px_var(--tw-shadow-color)] shadow-[#FFF58C] text-[#F3EDCB] leading-tight">
             Hack
           </div>
-          <div className="text-8xl -mt-4 [text-shadow:4px_4px_4px_var(--tw-shadow-color)] shadow-[#FFF58C] text-[#F3EDCB] leading-tight">
+          <div className="text-8xl -mt-8 [text-shadow:4px_4px_4px_var(--tw-shadow-color)] shadow-[#FFF58C] text-[#F3EDCB] leading-tight">
             BATTLE
           </div>
-          <div className="text-4xl mt-2">THE ULTIMATE</div>
-          <div className="text-4xl -mt-1">36 hour HACKATHON</div>
+          <div className="text-2xl mt-2">THE ULTIMATE</div>
+          <div className="text-2xl -mt-1">36 hour HACKATHON</div>
+          <div className="text-xl my-2">starts in...</div>
+
         </section>
 
         {/* Timer */}

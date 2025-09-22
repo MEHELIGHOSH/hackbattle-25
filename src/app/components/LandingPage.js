@@ -150,7 +150,20 @@ export default function Home({ onFinish }) {
         </div>
 
         {/* Hero section */}
-        <section className="relative w-[50vw] z-10 flex flex-col items-center text-center mt-32">
+        <section className="relative w-[50vw] z-10 flex flex-col items-center text-center mt-24">
+          <div>
+            <Image
+              src="/bob.png"
+              alt="Discord"
+              width={200}
+              height={200}
+              draggable="false"
+              className=""
+            />
+          </div>
+          <div className="leading-none [text-shadow:4px_4px_4px_var(--tw-shadow-color)] shadow-[#FFF58C] text-[#F3EDCB] animate-glow-pulse mt-4">
+            presents
+          </div>
           <div className="z-10 font-pixeboy text-[16vh] leading-none [text-shadow:4px_4px_4px_var(--tw-shadow-color)] shadow-[#FFF58C] text-[#F3EDCB] animate-glow-pulse">
             HACKBATTLE
           </div>
