@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import navbar from "./components/Navbar";
 import Home from "./components/LandingPage";
 import About from "./components/about";
 import FaqSection from "src/components/FaqSection";
@@ -38,23 +39,27 @@ export default function Page() {
     setSpeechBubbleComplete(true);
   };
 
-  // if (!cookieChecked) {
-  //   return (
-  //     <div className="fixed inset-0 z-50">
-  //         <video
-  //           src="mojang.mp4"
-  //           autoPlay
-  //           muted
-  //           playsInline
-  //           className="absolute top-0 left-0 w-full h-full object-cover"
-  //         />
-  //       </div>
-  //   );
-  // }
+  if (!cookieChecked) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
+        <video
+          src="/loader.webm"
+          autoPlay
+          loop
+          muted
+          playsInline
+          alt="Loading..."
+          height={128}
+          width={128}
+          className="w-32 h-32"
+        />
+      </div>
+    );
+  }
 
   return (
     <div>  
-      <Navbar />    
+      {!(isMobile && !speechBubbleComplete) && <Navbar />}  
       {isMobile ? (
         <>
           {!speechBubbleComplete && (

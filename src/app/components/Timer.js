@@ -38,7 +38,7 @@ export default function MinecraftTimer() {
   const TimeBlock = ({ value, label, color }) => (
     <div className="flex flex-col items-center mx-2 sm:mx-4">
       <div 
-        className={`${color} border-4 border-amber-900 p-4 sm:p-6 relative transform transition-transform hover:scale-105`}
+        className={`${color} p-4 sm:p-6 relative transform transition-transform hover:scale-105`}
         style={{
           boxShadow: 'inset 4px 4px 0px rgba(205, 133, 63, 0.8), inset -4px -4px 0px rgba(93, 78, 55, 0.8), 0 8px 16px rgba(0, 0, 0, 0.3)',
           textShadow: '2px 2px 0px rgba(0, 0, 0, 0.8)'

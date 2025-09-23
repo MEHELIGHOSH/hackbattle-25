@@ -1,20 +1,57 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { teamDetails } from "../api/team";
+import { useRouter } from "next/navigation";
 
 export default function TeamPage() {
+  const [team, setTeam] = useState(null);
+
   const [isCopied, setIsCopied] = useState(false);
-  const teamCode = "TEAM123ABC"; // Replace with actual team code
+  const router = useRouter();
+
+  useEffect(() => {
+    const getTeamDetails = async () => {
+      try {
+        const result = await teamDetails();
+        setTeam(result.data);
+        localStorage.setItem("teamDetails", JSON.stringify(result.data));
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getTeamDetails();
+  }, []);
 
   const handleCopyCode = async () => {
+    if (!team) return;
     try {
-      await navigator.clipboard.writeText(teamCode);
+      await navigator.clipboard.writeText(team.code);
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy: ', err);
+      console.error("Failed to copy: ", err);
     }
   };
+
+  if (!team)
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
+        <video
+          src="/loader.webm"
+          autoPlay
+          loop
+          muted
+          playsInline
+          height={128}
+          width={128}
+          className="w-32 h-32"
+        />
+      </div>
+    );
+
+  const leader = team.members[0];
+  const members = team.members.slice(1);
 
   return (
     <main className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden">
@@ -23,98 +60,177 @@ export default function TeamPage() {
         src="/team-info-bg.svg"
         alt="Background"
         fill
-        className="object-cover -z-10 brightness-110 scale-100" 
+        className="object-cover -z-10 brightness-110 scale-100"
         priority
       />
 
-      {/* Content */}
-      <div className="text-center text-white px-4 w-full">
-        {/* Title */}
-        <div className="relative">
-          <div className="relative top-5 sm:top-8 md:top-10 lg:top-12">
-            <h1 className="text-pink-500 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2">
-              TEAM NAME
-            </h1>
-            <div className="flex items-center justify-center gap-3 mb-10">
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-2 flex items-center gap-2">
-                <span className="text-sm sm:text-base md:text-lg font-mono text-white">
-                  {teamCode}
-                </span>
-                <button
-                  onClick={handleCopyCode}
-                  className="group relative p-2 rounded-lg bg-pink-500/20 hover:bg-pink-500/30 border border-pink-500/30 hover:border-pink-500/50 transition-all duration-200 hover:scale-105"
-                  title="Copy team code"
-                >
-                  {isCopied ? (
-                    <svg 
-                      className="w-4 h-4 text-green-400" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M5 13l4 4L19 7" 
-                      />
-                    </svg>
-                  ) : (
-                    <svg 
-                      className="w-4 h-4 text-white group-hover:text-pink-300 transition-colors" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <rect 
-                        x="9" 
-                        y="9" 
-                        width="13" 
-                        height="13" 
-                        rx="2" 
-                        ry="2" 
-                        strokeWidth="2"
-                      />
-                      <path 
-                        d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" 
-                        strokeWidth="2"
-                      />
-                    </svg>
-                  )}
-                </button>
-              </div>
-            </div>
+      {/* Top Nav */}
+      <div className="relative z-20 p-4 flex justify-between items-start w-full">
+        <button
+          onClick={() => router.push("/")}
+          className="w-11 h-10 sm:w-15 sm:h-15 bg-pink-500/70 hover:bg-pink-500/90 transition-colors flex items-center justify-center rounded-lg shadow-lg"
+          title="Go Back"
+        >
+          <div className="w-0 h-0 border-t-[12px] border-b-[12px] border-r-[16px] border-t-transparent border-b-transparent border-r-white ml-1"></div>
+        </button>
 
-            {/* Copy Success Notification */}
-            {isCopied && (
-              <div className="fixed top-4 right-4 z-50 animate-bounce">
-                <div className="bg-purple-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-sm font-medium">Team code copied!</span>
+        <button
+          onClick={() => router.push("/submission")}
+          className="px-6 py-3 bg-pink-500/70 hover:bg-pink-500/90 transition-colors rounded-lg shadow-lg text-white font-semibold"
+        >
+          Submission
+        </button>
+      </div>
+
+      {/* Dragon */}
+      <div className="relative w-full h-full hidden sm:block">
+        <div className="absolute -top-4 right-2 sm:-top-6 sm:right-4 md:-top-8 md:right-6 lg:-top-10 lg:right-8 z-50">
+          <Image
+            src="/dragon.webp"
+            alt="Dragon"
+            width={220}
+            height={80}
+            className="w-24 sm:w-32 md:w-40 lg:w-48 xl:w-56 h-auto"
+          />
+        </div>
+      </div>
+
+      {/* Team Name + Code */}
+      <div className="text-center text-white px-4 w-full mt-6">
+        <h1 className="text-pink-500 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+          {team.name}
+        </h1>
+
+        <div className="flex items-center justify-center gap-3 mb-10">
+          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg px-6 py-3 flex items-center gap-3">
+            <span className="text-xl sm:text-2xl md:text-3xl font-mono text-white">
+              {team.code}
+            </span>
+            <button
+              onClick={handleCopyCode}
+              className="group relative p-2 rounded-lg bg-pink-500/20 hover:bg-pink-500/30 border border-pink-500/30 hover:border-pink-500/50 transition-all duration-200 hover:scale-105"
+              title="Copy team code"
+            >
+              {isCopied ? (
+                <svg
+                  className="w-5 h-5 text-green-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-5 h-5 text-white group-hover:text-pink-300 transition-colors"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <rect
+                    x="9"
+                    y="9"
+                    width="13"
+                    height="13"
+                    rx="2"
+                    ry="2"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                    strokeWidth="2"
+                  />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden sm:block relative w-full max-w-[1200px] mx-auto">
+        <div className="relative w-full h-[70vh] min-h-[500px]">
+          {/* Leader Center */}
+          {leader && (
+            <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-10">
+              <div className="relative mb-3">
+                <Image
+                  src="/text-box-team.svg"
+                  alt="Leader box"
+                  width={260}
+                  height={90}
+                  className="w-70 h-auto"
+                />
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <p className="text-xs text-center text-white">
+                    {leader.name}
+                  </p>
+                  <p className="text-sm text-pink-200">Leader</p>
                 </div>
               </div>
-            )}
-          </div>
-        </div>
+              <Image
+                src="/purple_obj.svg"
+                alt="Leader object"
+                width={220}
+                height={220}
+                className="w-32 sm:w-40 md:w-48 lg:w-56 h-auto"
+              />
+            </div>
+          )}
 
-        {/* Dragon */}
-        <div className="relative w-full h-full hidden sm:block">
-          <div className="absolute -top-4 right-2 sm:-top-6 sm:right-4 md:-top-8 md:right-6 lg:-top-10 lg:right-8 z-50">
-            <Image
-              src="/dragon.webp"
-              alt="Leader box"
-              width={220}
-              height={80}
-              className="w-24 sm:w-32 md:w-40 lg:w-48 xl:w-56 h-auto"
-            />
-          </div>
+          {/* Members around leader */}
+          {members.slice(0, 4).map((member, idx) => {
+            const positions = [
+              // top-left
+              "absolute top-[32%] left-[21%]",
+              // bottom-left
+              "absolute top-[50%] left-[0%]",
+              // top-right
+              "absolute top-[32%] left-[60%]",
+              // bottom-right
+              "absolute top-[50%] left-[81%]",
+            ];
+            return (
+              <div
+                key={member.email}
+                className={`${positions[idx]} flex flex-col items-center`}
+              >
+                <div className="relative mb-2">
+                  <Image
+                    src="/text-box-team.svg"
+                    alt="Member box"
+                    width={200}
+                    height={70}
+                    className="w-60 h-auto"
+                  />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <p className="text-xs text-center text-white">
+                      {member.name}
+                    </p>
+                    <p className="text-xs text-pink-200">Member</p>
+                  </div>
+                </div>
+                <Image
+                  src="/purple_obj.svg"
+                  alt="Member object"
+                  width={160}
+                  height={160}
+                  className="w-24 sm:w-32 md:w-40 h-auto"
+                />
+              </div>
+            );
+          })}
         </div>
+      </div>
 
-        {/* Mobile Layout - Only visible on small screens */}
-        <div className="block sm:hidden w-full max-w-sm mx-auto space-y-6 px-2">
-          {/* Team Leader */}
+      {/* Mobile Layout */}
+      <div className="block sm:hidden w-full max-w-sm mx-auto space-y-6 px-2">
+        {leader && (
           <div className="flex flex-col items-center">
             <div className="relative">
               <Image
@@ -124,15 +240,15 @@ export default function TeamPage() {
                 height={90}
                 className="w-72 h-auto"
               />
-              <div className="absolute inset-0 flex flex-col items-center justify-center px-2">
-                <p className="text-base font-bold leading-tight">NAME</p>
-                <p className="text-sm leading-tight">DESIGNATION</p>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <p className=" text-xs text-center  font-bold">{leader.name}</p>
+                <p className="text-sm text-pink-200">Leader</p>
               </div>
             </div>
           </div>
-
-          {/* Team Member 1 */}
-          <div className="flex flex-col items-center">
+        )}
+        {members.map((member) => (
+          <div key={member.email} className="flex flex-col items-center">
             <div className="relative">
               <Image
                 src="/text-box-team.svg"
@@ -141,203 +257,37 @@ export default function TeamPage() {
                 height={90}
                 className="w-72 h-auto"
               />
-              <div className="absolute inset-0 flex flex-col items-center justify-center px-2">
-                <p className="text-sm font-semibold leading-tight">NAME</p>
-                <p className="text-xs leading-tight">DESIGNATION</p>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <p className="text-xs text-center text-white">{member.name}</p>
+
+                <p className="text-sm text-pink-200">Member</p>
               </div>
             </div>
           </div>
-
-          {/* Team Member 2 */}
-          <div className="flex flex-col items-center">
-            <div className="relative">
-              <Image
-                src="/text-box-team.svg"
-                alt="Member box"
-                width={280}
-                height={90}
-                className="w-72 h-auto"
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center px-2">
-                <p className="text-sm font-semibold leading-tight">NAME</p>
-                <p className="text-xs leading-tight">DESIGNATION</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Team Member 3 */}
-          <div className="flex flex-col items-center">
-            <div className="relative">
-              <Image
-                src="/text-box-team.svg"
-                alt="Member box"
-                width={280}
-                height={90}
-                className="w-72 h-auto"
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center px-2">
-                <p className="text-sm font-semibold leading-tight">NAME</p>
-                <p className="text-xs leading-tight">DESIGNATION</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Team Member 4 */}
-          <div className="flex flex-col items-center">
-            <div className="relative">
-              <Image
-                src="/text-box-team.svg"
-                alt="Member box"
-                width={280}
-                height={90}
-                className="w-72 h-auto"
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center px-2">
-                <p className="text-sm font-semibold leading-tight">NAME</p>
-                <p className="text-xs leading-tight">DESIGNATION</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Desktop Layout - Hidden on mobile, visible on larger screens */}
-        <div className="hidden sm:block relative w-full max-w-[1200px] mx-auto">
-          {/* Responsive container with proper aspect ratio */}
-          <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[75vh] lg:h-[80vh] min-h-[500px]">
-            
-            {/* Center Team Leader */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-10">
-              {/* Leader Text Box - Above the purple object */}
-              <div className="relative mb-2 sm:mb-3 md:mb-4">
-                <Image
-                  src="/text-box-team.svg"
-                  alt="Leader box"
-                  width={220}
-                  height={80}
-                  className="w-36 sm:w-44 md:w-56 lg:w-64 xl:w-70 h-auto"
-                />
-                <p className="absolute inset-0 flex items-center justify-center text-[10px] sm:text-xs md:text-sm lg:text-base font-bold">
-                  NAME DESIGNATION
-                </p>
-              </div>
-              {/* Larger Leader Purple Object */}
-              <Image
-                src="/purple_obj.svg"
-                alt="Leader"
-                width={200}
-                height={200}
-                className="w-24 sm:w-32 md:w-40 lg:w-48 xl:w-56 h-auto"
-              />
-            </div>
-
-            {/* Left Side - Top Member */}
-            <div className="absolute 
-            top-[52%] sm:top-[42%] md:top-[38%] lg:top-[35.3%] 
-            left-[16%] sm:left-[22%] md:left-[28%] lg:left-[26%] 
-            ">
-              <div className="relative mt-1 sm:mt-2">
-                <Image
-                  src="/text-box-team.svg"
-                  alt="Box"
-                  width={180}
-                  height={70}
-                  className="w-36 sm:w-40 md:w-44 lg:w-44 xl:w-50 h-auto"
-                />
-                <p className="absolute inset-0 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                   NAME DESIGNATION
-                </p>
-              </div>
-              <Image
-                src="/purple_obj.svg"
-                alt="Member"
-                width={200}
-                height={200}
-                className="w-18 sm:w-26 md:w-34 lg:w-42 xl:w-50 h-auto"
-              />
-            </div>
-
-            {/* Left Side - Bottom Member */}
-            <div className="absolute 
-            top-[68%] sm:top-[58%] md:top-[44%] lg:top-[51.3%] 
-            left-[0%] sm:left-[10%] md:left-[8%] lg:left-[10%]  
-            flex flex-col items-center 
-            ">
-              <div className="relative mt-1 sm:mt-2">
-                <Image
-                  src="/text-box-team.svg"
-                  alt="Box"
-                  width={180}
-                  height={70}
-                  className="w-36 sm:w-40 md:w-44 lg:w-44 xl:w-50 h-auto"
-                />
-                <p className="absolute inset-0 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                  NAME DESIGNATION
-                </p>
-              </div>
-              <Image
-                src="/purple_obj.svg"
-                alt="Member"
-                width={200}
-                height={200}
-                className="w-18 sm:w-26 md:w-34 lg:w-42 xl:w-50 h-auto"
-              />
-            </div>
-
-            {/* Right Side - Top Member */}
-            <div className="absolute 
-            top-[52%] sm:top-[58%] md:top-[44%] lg:top-[35.3%] 
-            left-[66%] sm:left-[80%] md:left-[75%] lg:left-[58%]  
-            flex flex-col items-center 
-            ">
-              <div className="relative mt-1 sm:mt-2">
-                <Image
-                  src="/text-box-team.svg"
-                  alt="Box"
-                  width={180}
-                  height={70}
-                  className="w-36 sm:w-40 md:w-44 lg:w-44 xl:w-50 h-auto"
-                />
-                <p className="absolute inset-0 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                  NAME DESIGNATION
-                </p>
-              </div>
-              <Image
-                src="/purple_obj.svg"
-                alt="Member"
-                width={100}
-                height={100}
-                className="w-18 sm:w-26 md:w-34 lg:w-42 xl:w-50 h-auto"
-              />
-            </div>
-
-            {/* Right Side - Bottom Member */}
-            <div className="absolute 
-            top-[68%] sm:top-[58%] md:top-[44%] lg:top-[51.3%] 
-            left-[80%] sm:left-[80%] md:left-[8%] lg:left-[73%] 
-            flex flex-col items-center">
-              <div className="relative mb-1 sm:mb-2">
-                <Image
-                  src="/text-box-team.svg"
-                  alt="Box"
-                  width={180}
-                  height={70}
-                  className="w-36 sm:w-40 md:w-44 lg:w-44 xl:w-50 h-auto"
-                />
-                <p className="absolute inset-0 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                  NAME DESIGNATION 
-                </p>
-              </div>
-              <Image
-                src="/purple_obj.svg"
-                alt="Member"
-                width={100}
-                height={100}
-                className="w-18 sm:w-26 md:w-34 lg:w-42 xl:w-50 h-auto"
-              />
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
+
+      {/* Copy success popup */}
+      {isCopied && (
+        <div className="fixed top-4 right-4 z-50 animate-bounce">
+          <div className="bg-black text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span className="text-sm font-medium">Team code copied!</span>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
