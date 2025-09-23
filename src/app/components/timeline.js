@@ -38,87 +38,98 @@ export default function TimelineBackground() {
             </h1>
 
             {/* ============ DESKTOP VIEW ============ */}
-            <div className="hidden md:block">
-                {/* Snake path overlay */}
-                <div className="absolute z-40 pointer-events-none"
-                     style={{ width: 1400, height: 450, top: 100}}>
-                    <Image src="/snake.svg"
-                           alt="Snake" fill
-                           className="object-contain scale-x-[1.8] scale-y-[1.2]"
-                           sizes="1400px" />
-                </div>
-
-                {/* Signboard layer */}
-                <div className="absolute inset-0 z-40">
-                {[
-                    { left: '12%',  top: '19%' },
-                    { left: '40%', top: '19%' },
-                    { left: '64%', top: '19%' },
-                    { left: '46%', top: '93%' },
-                    { left: '52%', top: '37%' },
-                    { left: '42%', top: '56%' },
-                    { left: '60%', top: '56%' },
-                    { left: '52%', top: '74%' },
-                    { left: '32%', top: '74%' },
-                    { left: '80%', top: '93%' },
-                ].map((p, i) => (
-                    <div
-                        key={i}
-                        className="absolute -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_8px_12px_rgba(0,0,0,0.45)]"
-                        style={{ left: p.left, top: p.top, width: 140, height: 90 }}
-                    >
+            <div className="hidden md:flex justify-center items-center w-full h-screen">
+                <div className="relative w-full max-w-4xl aspect-[1400/900]">
+                    {/* Snake (with scaling) */}
+                    <div className="absolute inset-0 scale-x-[1.4] scale-y-[0.95] origin-top-left translate-x-[-27%] translate-y-[1%]">
                         <Image
-                            src="/signboard.svg"
-                            alt=""
+                            src="/snake.svg"
+                            alt="Snake"
                             fill
                             className="object-contain"
-                            sizes="140px"
+                            sizes="100vw"
                         />
                     </div>
-                ))}
-                </div>
-            </div>
-            {/* ============ MOBILE VIEW ============ */}
-            <div className="block md:hidden relative h-[120vh] w-full">
-                {/* Snake below */}
-                <div className="absolute z-20 pointer-events-none -translate-x-32"
-                     style={{ width: 800, height: 360, top: 240, left: -90 }}>
-                    <Image
-                        src="/snake.svg"
-                        alt="Snake"
-                        fill
-                        className="object-contain scale-x-[1] scale-y-[1.7]"
-                        sizes="900px"
-                        priority={false}
-                    />
-                </div>
 
-                {/* Signboards above with shadow */}
-                <div className="absolute inset-0 z-30">
+                    {/* Signboards (aligned to scaled snake) */}
                     {[
-                        { left: '13%', top: '17%' },
-                        { left: '68%', top: '17%' },
-                        { left: '80%', top: '30%' },
-                        { left: '40%', top: '30%' },
-                        { left: '62%', top: '44%' },
-                        { left: '26%', top: '44%' },
-                        { left: '70%', top: '56%' },
-                        { left: '24%', top: '56%' },
-                        { left: '43%', top: '69%' },
-                        { left: '88%', top: '69%' },
+                        { left: "12%", top: "13%", label: "Gate Opens", time: "8:00 am" },
+                        { left: "40%", top: "13%" },
+                        { left: "64%", top: "13%" },
+                        { left: "35%", top: "102%" },
+                        { left: "52%", top: "35%" },
+                        { left: "35%", top: "57%" },
+                        { left: "68%", top: "57%" },
+                        { left: "57%", top: "79%" },
+                        { left: "16%", top: "79%" },
+                        { left: "84%", top: "102%" },
                     ].map((p, i) => (
                         <div
                             key={i}
-                            className="absolute -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_6px_10px_rgba(0,0,0,0.45)]"
-                            style={{ left: p.left, top: p.top, width: 120, height: 84 }}
+                            style={{ left: p.left, top: p.top }}
+                            className="absolute -translate-x-1/2 -translate-y-1/2 w-[15%] h-auto aspect-[140/90] drop-shadow-[0_8px_12px_rgba(0,0,0,0.45)]"
                         >
                             <Image
                                 src="/signboard.svg"
-                                alt=""
+                                alt="Signboard"
                                 fill
                                 className="object-contain"
-                                sizes="120px"
                             />
+                            {i === 0 && (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center text-center md:text-[8px] font-['Press_Start_2P'] text-[#000000] translate-y-[10%]">
+                                    <span>{p.label}</span>
+                                    <span>{p.time}</span>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* ============ MOBILE VIEW ============ */}
+            <div className="flex md:hidden justify-center items-center w-full h-screen">
+                <div className="relative w-full max-w-md aspect-[800/1000]">
+                    {/* Snake (with scaling) */}
+                    <div className="absolute inset-0 scale-x-[1.4] scale-y-[2.2] origin-top-left translate-x-[-21%] translate-y-[-64%]">
+                        <Image
+                            src="/snake.svg"
+                            alt="Snake"
+                            fill
+                            className="object-contain"
+                            sizes="100vw"
+                        />
+                    </div>
+
+                    {/* Signboards */}
+                    {[
+                        { left: "17%", top: "2%", label: "Gate Opens", time: "8:00 am" },
+                        { left: "68%", top: "2%" },
+                        { left: "80%", top: "30%" },
+                        { left: "38%", top: "30%" },
+                        { left: "69%", top: "56%" },
+                        { left: "26%", top: "56%" },
+                        { left: "80%", top: "85%" },
+                        { left: "36%", top: "85%" },
+                        { left: "23%", top: "110%" },
+                        { left: "70%", top: "110%" },
+                    ].map((p, i) => (
+                        <div
+                            key={i}
+                            style={{ left: p.left, top: p.top }}
+                            className="absolute -translate-x-1/2 -translate-y-1/2 w-[30%] h-auto aspect-[120/84] drop-shadow-[0_6px_10px_rgba(0,0,0,0.45)]"
+                        >
+                            <Image
+                                src="/signboard.svg"
+                                alt="Signboard"
+                                fill
+                                className="object-contain"
+                            />
+                            {i === 0 && (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-[10px] md:text-[10px] font-['Press_Start_2P'] text-[#000000] translate-y-[10%]">
+                                    <span>{p.label}</span>
+                                    <span>{p.time}</span>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
